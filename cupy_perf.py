@@ -191,14 +191,15 @@ class PerfCases(object):
 
 def run(module_name):
     print(cupy)
-    mod = sys.modules[module_name]
-    classes = []
-    for name, cls in inspect.getmembers(mod):
-        if (not name.startswith('_')) and inspect.isclass(cls) and issubclass(cls, PerfCases):
-            _, linum = inspect.getsourcelines(cls)
-            classes.append((linum, cls))
+    with cupy.cuda.Device(3):
+        mod = sys.modules[module_name]
+        classes = []
+        for name, cls in inspect.getmembers(mod):
+            if (not name.startswith('_')) and inspect.isclass(cls) and issubclass(cls, PerfCases):
+                _, linum = inspect.getsourcelines(cls)
+                classes.append((linum, cls))
 
-    classes = sorted(classes)
-    for linum, cls in classes:
-        cases = cls()
-        cases.run()
+        classes = sorted(classes)
+        for linum, cls in classes:
+            cases = cls()
+            cases.run()

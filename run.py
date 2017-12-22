@@ -19,70 +19,90 @@ class Perf(cupy_perf.PerfCases):
         assert cupy.min(self.a[self.k:]) >= self.a[self.k]
 
 
-class Perf_12_20(Perf):
+class Perf_16_31(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_12_20, self).setUp(1 << 12, 20)
+        super(Perf_16_31, self).setUp(1 << 16, 31)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_16_20(Perf):
+class Perf_16_63(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_20, self).setUp(1 << 16, 20)
+        super(Perf_16_63, self).setUp(1 << 16, 63)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_20_20(Perf):
+class Perf_16_127(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_20, self).setUp(1 << 20, 20)
+        super(Perf_16_127, self).setUp(1 << 16, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_20(Perf):
+class Perf_20_31(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_20, self).setUp(1 << 24, 20)
+        super(Perf_20_31, self).setUp(1 << 20, 31)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_10(Perf):
+class Perf_20_63(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_10, self).setUp(1 << 24, 10)
+        super(Perf_20_63, self).setUp(1 << 20, 63)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_100(Perf):
+class Perf_20_127(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_100, self).setUp(1 << 24, 100)
+        super(Perf_20_127, self).setUp(1 << 20, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_1000(Perf):
+class Perf_24_31(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_1000, self).setUp(1 << 24, 1000)
+        super(Perf_24_31, self).setUp(1 << 24, 31)
+
+    @cupy_perf.attr(n=100)
+    def perf_partition(self):
+        cupy.partition(self.a, self.k)
+
+
+class Perf_24_63(Perf):
+    def setUp(self):
+        print(self.__class__.__name__)
+        super(Perf_24_63, self).setUp(1 << 24, 63)
+
+    @cupy_perf.attr(n=100)
+    def perf_partition(self):
+        cupy.partition(self.a, self.k)
+
+
+class Perf_24_127(Perf):
+    def setUp(self):
+        print(self.__class__.__name__)
+        super(Perf_24_127, self).setUp(1 << 24, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
