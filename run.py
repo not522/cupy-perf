@@ -29,20 +29,20 @@ class Perf_16_31(Perf):
         cupy.partition(self.a, self.k)
 
 
-class Perf_16_63(Perf):
+class Perf_16_127(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_63, self).setUp(1 << 16, 63)
+        super(Perf_16_127, self).setUp(1 << 16, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_16_127(Perf):
+class Perf_16_511(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_127, self).setUp(1 << 16, 127)
+        super(Perf_16_511, self).setUp(1 << 16, 511)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
@@ -59,20 +59,20 @@ class Perf_20_31(Perf):
         cupy.partition(self.a, self.k)
 
 
-class Perf_20_63(Perf):
+class Perf_20_127(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_63, self).setUp(1 << 20, 63)
+        super(Perf_20_127, self).setUp(1 << 20, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_20_127(Perf):
+class Perf_20_511(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_127, self).setUp(1 << 20, 127)
+        super(Perf_20_511, self).setUp(1 << 20, 511)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
@@ -89,20 +89,20 @@ class Perf_24_31(Perf):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_63(Perf):
+class Perf_24_127(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_63, self).setUp(1 << 24, 63)
+        super(Perf_24_127, self).setUp(1 << 24, 127)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
         cupy.partition(self.a, self.k)
 
 
-class Perf_24_127(Perf):
+class Perf_24_511(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_24_127, self).setUp(1 << 24, 127)
+        super(Perf_24_511, self).setUp(1 << 24, 511)
 
     @cupy_perf.attr(n=100)
     def perf_partition(self):
