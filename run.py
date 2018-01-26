@@ -5,108 +5,75 @@ import cupy_perf
 
 
 class Perf(cupy_perf.PerfCases):
-    def setUp(self, n, k):
+    def setUp(self, n):
         self.n = n
-        self.k = k
-        self.a = cupy.arange(self.n).astype('f')
-        self.orig = self.a.copy()
-        cupy.random.shuffle(self.a)
-
-    def tearDown(self):
-        self.a = cupy.partition(self.a, self.k)
-        assert numpy.array_equal(cupy.asnumpy(cupy.sort(self.orig)), cupy.asnumpy(cupy.sort(self.a)))
-        assert cupy.max(self.a[:self.k]) <= self.a[self.k]
-        assert cupy.min(self.a[self.k:]) >= self.a[self.k]
+        self.a = cupy.empty(self.n, dtype=numpy.complex64)
 
 
-class Perf_16_31(Perf):
+class Perf_16(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_31, self).setUp(1 << 16, 31)
+        super(Perf_16, self).setUp(1 << 16)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        cupy.fft.fft(self.a)
 
 
-class Perf_16_127(Perf):
+class Perf_20(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_127, self).setUp(1 << 16, 127)
+        super(Perf_20, self).setUp(1 << 20)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        cupy.fft.fft(self.a)
 
 
-class Perf_16_511(Perf):
+class Perf_24(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_16_511, self).setUp(1 << 16, 511)
+        super(Perf_24, self).setUp(1 << 24)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        cupy.fft.fft(self.a)
 
 
-class Perf_20_31(Perf):
+class Perf_Plan_16(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_31, self).setUp(1 << 20, 31)
+        super(Perf_Plan_16, self).setUp(1 << 16)
+        self.plan = cupy.cuda.cufft.Plan1d(self.n, cupy.cuda.cufft.CUFFT_C2C, 1)
+        self.out = cupy.arange(self.n).astype(numpy.complex64)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        self.plan.fft(self.a, self.out, cupy.cuda.cufft.CUFFT_FORWARD)
 
 
-class Perf_20_127(Perf):
+class Perf_Plan_20(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_127, self).setUp(1 << 20, 127)
+        super(Perf_Plan_20, self).setUp(1 << 20)
+        self.plan = cupy.cuda.cufft.Plan1d(self.n, cupy.cuda.cufft.CUFFT_C2C, 1)
+        self.out = cupy.arange(self.n).astype(numpy.complex64)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        self.plan.fft(self.a, self.out, cupy.cuda.cufft.CUFFT_FORWARD)
 
 
-class Perf_20_511(Perf):
+class Perf_Plan_24(Perf):
     def setUp(self):
         print(self.__class__.__name__)
-        super(Perf_20_511, self).setUp(1 << 20, 511)
+        super(Perf_Plan_24, self).setUp(1 << 24)
+        self.plan = cupy.cuda.cufft.Plan1d(self.n, cupy.cuda.cufft.CUFFT_C2C, 1)
+        self.out = cupy.arange(self.n).astype(numpy.complex64)
 
     @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
-
-
-class Perf_24_31(Perf):
-    def setUp(self):
-        print(self.__class__.__name__)
-        super(Perf_24_31, self).setUp(1 << 24, 31)
-
-    @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
-
-
-class Perf_24_127(Perf):
-    def setUp(self):
-        print(self.__class__.__name__)
-        super(Perf_24_127, self).setUp(1 << 24, 127)
-
-    @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
-
-
-class Perf_24_511(Perf):
-    def setUp(self):
-        print(self.__class__.__name__)
-        super(Perf_24_511, self).setUp(1 << 24, 511)
-
-    @cupy_perf.attr(n=100)
-    def perf_partition(self):
-        cupy.partition(self.a, self.k)
+    def perf_fft(self):
+        self.plan.fft(self.a, self.out, cupy.cuda.cufft.CUFFT_FORWARD)
 
 
 cupy_perf.run(__name__)
