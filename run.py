@@ -1,4 +1,5 @@
 import cupy
+import cupyx.scipy.ndimage
 import numpy
 import scipy.ndimage
 
@@ -11,16 +12,16 @@ class Perf(cupy_perf.PerfCases):
         self.a = cupy.empty(shape, numpy.float32)
 
     def affine(self):
-        cupy.cupyx.ndimage.affine_transform(self.a, [[1., 0., 0., -2.5], [0., 0.5, 0.0, 0.0], [0., 0., 1., 0.]], order=1)
+        cupyx.scipy.ndimage.affine_transform(self.a, [[1., 0., 0., -2.5], [0., 0.5, 0.0, 0.0], [0., 0., 1., 0.]], order=1)
 
     def rotate(self):
-        cupy.cupyx.ndimage.rotate(self.a, 1, order=1)
+        cupyx.scipy.ndimage.rotate(self.a, 1, order=1)
 
     def zoomin(self):
-        cupy.cupyx.ndimage.zoom(self.a, [2, 2, 1], order=1)
+        cupyx.scipy.ndimage.zoom(self.a, [2, 2, 1], order=1)
 
     def zoomout(self):
-        cupy.cupyx.ndimage.zoom(self.a, [0.5, 0.5, 1], order=1)
+        cupyx.scipy.ndimage.zoom(self.a, [0.5, 0.5, 1], order=1)
 
 
 class Perf_cpu(cupy_perf.PerfCases):
