@@ -1,58 +1,88 @@
 import cupy
 import numpy
+import scipy.ndimage
 
 import cupy_perf
 
 
-class Perf1(cupy_perf.PerfCases):
-    enable_line_profiler = False
+class Perf(cupy_perf.PerfCases):
+    def setUp(self, n, sz):
+        shape = (sz, sz, n)
+        self.a = cupy.empty(shape, numpy.float32)
 
+    def affine(self):
+        cupy.cupyx.ndimage.affine_transform(self.a, [[1., 0., 0., -2.5], [0., 0.5, 0.0, 0.0], [0., 0., 1., 0.]], order=1)
+
+    def rotate(self):
+        cupy.cupyx.ndimage.rotate(self.a, 1, order=1)
+
+    def zoomin(self):
+        cupy.cupyx.ndimage.zoom(self.a, [2, 2, 1], order=1)
+
+    def zoomout(self):
+        cupy.cupyx.ndimage.zoom(self.a, [0.5, 0.5, 1], order=1)
+
+
+class Perf_cpu(cupy_perf.PerfCases):
+    def setUp(self, n, sz):
+        shape = (sz, sz, n)
+        self.a = numpy.empty(shape, numpy.float32)
+
+    def affine(self):
+        scipy.ndimage.affine_transform(self.a, [[1., 0., 0., -2.5], [0., 0.5, 0.0, 0.0], [0., 0., 1., 0.]], order=1)
+
+    def rotate(self):
+        scipy.ndimage.rotate(self.a, 1, order=1)
+
+    def zoomin(self):
+        scipy.ndimage.zoom(self.a, [2, 2, 1], order=1)
+
+    def zoomout(self):
+        scipy.ndimage.zoom(self.a, [0.5, 0.5, 1], order=1)
+
+
+class Perf_100_100(Perf):
     def setUp(self):
-        shape_tiny = (2, 1, 2)
-        shape_huge = (2000, 50, 100)
-        self.a = cupy.empty(shape_tiny, numpy.float32)
-        self.b = cupy.empty(shape_tiny, numpy.float32)
-        self.c = cupy.empty(shape_tiny, numpy.float32)
-        self.a_huge = cupy.empty(shape_huge, numpy.float32)
-        self.b_huge = cupy.empty(shape_huge, numpy.float32)
-        self.c_huge = cupy.empty(shape_huge, numpy.float32)
+        print(self.__class__.__name__)
+        super(Perf_100_100, self).setUp(100, 100)
 
-        self.kernel = self._get_kernel()
+    @cupy_perf.attr(n=100)
+    def perf_affine(self):
+        self.affine()
 
-    def _get_kernel(self):
-        return cupy.ElementwiseKernel(
-            '''T a, T b''', '''T c''',
-            '''c = a + b;''', 'test_kernel')
+    @cupy_perf.attr(n=100)
+    def perf_rotate(self):
+        self.rotate()
 
-    def perf_empty(self):
-        pass
+    @cupy_perf.attr(n=100)
+    def perf_zoomin(self):
+        self.zoomin()
 
-    def perf_sum(self):
-        cupy.sum(self.a)
+    @cupy_perf.attr(n=100)
+    def perf_zoomout(self):
+        self.zoomout()
 
-    @cupy_perf.attr(n=500)
-    def perf_sum_huge(self):
-        a = cupy.sum(self.a_huge)
-        assert a.shape == ()
 
-    def perf_add(self):
-        cupy.add(self.a, self.b)
+class Perf_100_100_cpu(Perf_cpu):
+    def setUp(self):
+        print(self.__class__.__name__)
+        super(Perf_100_100_cpu, self).setUp(100, 100)
 
-    def perf_add_out(self):
-        cupy.add(self.a, self.b, out=self.c)
+    @cupy_perf.attr(n=100)
+    def perf_affine(self):
+        self.affine()
 
-    def perf_add_out_huge(self):
-        cupy.add(self.a_huge, self.b_huge, out=self.c_huge)
+    @cupy_perf.attr(n=100)
+    def perf_rotate(self):
+        self.rotate()
 
-    def perf_userkernel_create(self):
-        self._get_kernel()
+    @cupy_perf.attr(n=100)
+    def perf_zoomin(self):
+        self.zoomin()
 
-    def perf_userkenel(self):
-        self.kernel(self.a, self.b, self.c)
-
-    @cupy_perf.attr(n=10000)
-    def perf_userkernel_huge(self):
-        self.kernel(self.a_huge, self.b_huge, self.c_huge)
+    @cupy_perf.attr(n=100)
+    def perf_zoomout(self):
+        self.zoomout()
 
 
 cupy_perf.run(__name__)
