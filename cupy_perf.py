@@ -189,9 +189,9 @@ class PerfCases(object):
         return PerfCaseResult(name, ts)
 
 
-def run(module_name):
+def run(module_name, device_id=0):
     print(cupy)
-    with cupy.cuda.Device(3):
+    with cupy.cuda.Device(device_id):
         mod = sys.modules[module_name]
         classes = []
         for name, cls in inspect.getmembers(mod):

@@ -45,9 +45,9 @@ class Perf_cpu(cupy_perf.PerfCases):
 
 class Perf_opencv(cupy_perf.PerfCases):
     def setUp(self, n, sz):
+        cv2.ocl.setUseOpenCL(True)
         shape = (sz, sz, n)
         self.a = numpy.empty(shape, numpy.float32)
-        # cv2.ocl.setUseOpenCL(True)
 
     def affine(self):
         M = numpy.array([[2., 0., 0.], [0., 1., 5.]])
@@ -113,7 +113,7 @@ class Perf_100_100_cpu(Perf_cpu):
     def perf_zoomout(self):
         self.zoomout()
 '''
-
+'''
 class Perf_100_100_opencv(Perf_opencv):
     def setUp(self):
         print(self.__class__.__name__)
@@ -134,6 +134,6 @@ class Perf_100_100_opencv(Perf_opencv):
     @cupy_perf.attr(n=100)
     def perf_zoomout(self):
         self.zoomout()
+'''
 
-
-cupy_perf.run(__name__)
+cupy_perf.run(__name__, 0)
